@@ -6,57 +6,99 @@
  * https://rosettacode.org/wiki/Mandelbrot_set#PPM_Interactive <---- OLHAR
  */
 
-void * helloWorld( void *str ) {
-	printf("Hello. I am thread %d\n", (int) pthread_self());
+struct thread_data
+{
+	int comprimento;
+	int altura;
+	int max_i;
+	float c_real;
+	float c_img;
+};
+
+void *helloWorld(void *threadarg)
+{
+	struct thread_data *my_data;
+	my_data = (struct thread_data *)threadarg;
+
+	printf("MThread: Iniciando geração da imagem: %d x %d\n", my_data->comprimento, my_data->altura);
+
+	int linha, coluna = 0;
+	unsigned char branco[3] = {0, 0, 0};
+	unsigned char preto[3] = {255, 255, 255};
+
+	FILE *fp = fopen("first.ppm", "wb");
+	(void)fprintf(fp, "P6\n%d %d\n255\n", my_data->comprimento, my_data->altura);
+
+	for (linha = 0; linha < my_data->altura; linha++)
+	{
+		for (coluna = 0; coluna < my_data->comprimento; coluna++)
+		{
+			double real_c = (coluna - my_data->comprimento / 2) * my_data->c_real / my_data->comprimento;
+			double im_c = (linha - my_data->altura / 2) * my_data->c_img / my_data->comprimento;
+			double x = 0, y = 0;
+			int i = 0;
+
+			while (x * x + y * y < 4 && i < my_data->max_i)
+			{
+				double x_new = x * x - y * y + real_c;
+				y = 2 * x * y + im_c;
+				x = x_new;
+				i++;
+			}
+
+			if (i < my_data->max_i)
+			{
+				(void)fwrite(branco, 1, 3, fp);
+				//printf("Hello. I am thread white %d\n", coluna);
+			}
+			else
+			{
+				(void)fwrite(preto, 1, 3, fp);
+				//printf("Hello. I am thread black %d\n", coluna);
+			}
+		}
+	}
+
+	(void)fclose(fp);
 }
 
 /*
  * argv[1] = width
  * argv[2] = height
  */
-int main(int argc, char* argv[]) 
+int main(int argc, char *argv[])
 {
-	const int comprimento = atoi(argv[1]);
-	const int altura      = atoi(argv[2]);
-	const int max_i       = atoi(argv[3]);
-	const float c_real      = atof(argv[4]);
-	const float c_img       = atof(argv[5]);
+	struct thread_data td;
+	td.comprimento = atoi(argv[1]);
+	td.altura = atoi(argv[2]);
+	td.max_i = atoi(argv[3]);
+	td.c_real = atof(argv[4]);
+	td.c_img = atof(argv[5]);
+
 	//double real_c         = atof(argv[4]);
 	//double im_c           = atof(argv[5]);
-	int linha, coluna = 0;
-	unsigned char branco[3] = {0, 0, 0};
-	unsigned char preto[3] = {255, 255, 255};
+	int numThreads = 5;
+	int rc;
+	int i;
 
-	printf("MThread: Iniciando geração da imagem: %d x %d\n", comprimento, altura);
-	FILE *fp = fopen("first.ppm", "wb");
-	(void) fprintf(fp, "P6\n%d %d\n255\n", comprimento, altura);
+	pthread_t threads[numThreads];
+	struct thread_data thread_d[numThreads];
 
-	for (linha = 0; linha < altura; linha++)
+	for (i = 0; i < numThreads; i++)
 	{
+		//cout <<"main() : creating thread, " << i << endl;
 
-		for(coluna = 0; coluna < comprimento; coluna++)
+		thread_d[i] = td;
+		rc = pthread_create(&threads[i], NULL, helloWorld, (void *)&thread_d[i]);
+
+		if (rc)
 		{
-			double real_c = (coluna - comprimento/2)*c_real/comprimento;
-        	double im_c   = (linha - altura/2)*c_img/comprimento;
-			double x = 0, y  = 0;
-			int i = 0;
-
-			while(x*x+y*y < 4 && i < max_i)
-			{
-				double x_new = x*x - y*y + real_c;
-				y = 2*x*y+im_c;
-				x = x_new;
-				i++;
-			}
-			if (i < max_i) 
-			{
-				(void) fwrite(branco, 1, 3, fp);
-			} else {
-				(void) fwrite(preto, 1, 3, fp);
-			}
+			//cout << "Error:unable to create thread," << rc << endl;
+			exit(-1);
 		}
-	}
 
-	(void) fclose(fp);
+		//int rc = pthread_create(&threads, NULL, helloWorld, (void *)&td);
+	}
+	pthread_exit(NULL);
 	return 0;
 }
