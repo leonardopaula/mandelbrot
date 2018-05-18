@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <string.h>
 
 /* 
  * https://rosettacode.org/wiki/Mandelbrot_set#PPM_Interactive <---- OLHAR
@@ -26,7 +27,11 @@ void *helloWorld(void *threadarg)
 	unsigned char branco[3] = {0, 0, 0};
 	unsigned char preto[3] = {255, 255, 255};
 
-	FILE *fp = fopen("first.ppm", "wb");
+	char nome_arquivo[20];
+
+	sprintf(nome_arquivo, "%ds.ppm", pthread_self());
+
+	FILE *fp = fopen(nome_arquivo, "wb");
 	(void)fprintf(fp, "P6\n%d %d\n255\n", my_data->comprimento, my_data->altura);
 
 	for (linha = 0; linha < my_data->altura; linha++)
@@ -99,6 +104,7 @@ int main(int argc, char *argv[])
 
 		//int rc = pthread_create(&threads, NULL, helloWorld, (void *)&td);
 	}
+
 	pthread_exit(NULL);
 	return 0;
 }
