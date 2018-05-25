@@ -1,6 +1,6 @@
 # Mandelbrot Fractal
 
-<a href="https://github.com/leonardopaula">@leonardopaula</a>
+<a href="https://github.com/leonardopaula">@leonardopaula</a></br>
 <a href="https://github.com/GustavoSchroder">@GustavoSchroder</a>
 
 ## Compilar:
