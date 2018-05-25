@@ -1,6 +1,0 @@
-Compilar:
-gcc main.c -o main -pthread
-
-Rodar:
-./main 1024 768 1000 -1.0 -1.0
-
