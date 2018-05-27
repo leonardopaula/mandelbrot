@@ -7,15 +7,35 @@
 #include <OpenGL/glu.h>
 #else
 #ifdef _WIN32
-  #include <windows.h>
+#include <windows.h>
 #endif
 #include <GL/gl.h>
 #include <GL/glu.h>
 #endif
+#include <pthread.h>
 
 //gcc -o mandelbrot  mandelbrot.c -L/System/Library/Frameworks -framework GLUT -framework OpenGL
 
 #define VAL 255
+#define NUM_THREADS 5
+
+struct thread_data
+{
+	int thread_id;
+	char *message;
+};
+
+//Teste threads , printa hello world
+void *PrintHello(void *threadarg)
+{
+	struct thread_data *my_data;
+	my_data = (struct thread_data *)threadarg;
+
+	printf("Thread ID : %d\n", my_data->thread_id);
+	printf("Message : %s\n", my_data->message);
+
+	pthread_exit(NULL);
+}
 
 void set_texture();
 
@@ -39,8 +59,8 @@ int dump = 1; //Screen Dump
 
 void render()
 {
-	double x = (double) width / tex_w;
-	double y = (double) height / tex_h;
+	double x = (double)width / tex_w;
+	double y = (double)height / tex_h;
 
 	glClear(GL_COLOR_BUFFER_BIT);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
@@ -151,8 +171,12 @@ void hsv_to_rgb(int hue, int min, int max, rgb_t *p)
 	}
 }
 
-void calcular_mandelbrot()
+void *calcular_mandelbrot(void *threadarg)
 {
+	long tid;
+	tid = (long)threadarg;
+	printf("Hello World! Thread ID,  %ld\n", tid);
+
 	int i, j, iter, min, max;
 	rgb_t *px;
 	double x, y, zx, zy, zx2, zy2;
@@ -192,6 +216,8 @@ void calcular_mandelbrot()
 	for (i = 0; i < height; i++)
 		for (j = 0, px = tex[i]; j < width; j++, px++)
 			hsv_to_rgb(*(unsigned short *)px, min, max, px);
+	
+	pthread_exit(NULL);
 }
 
 void alloc_tex()
@@ -200,8 +226,10 @@ void alloc_tex()
 	int ow = tex_w;
 	int oh = tex_h;
 
-	for (tex_w = 1; tex_w < width; tex_w <<= 1);
-	for (tex_h = 1; tex_h < height; tex_h <<= 1);
+	for (tex_w = 1; tex_w < width; tex_w <<= 1)
+		;
+	for (tex_h = 1; tex_h < height; tex_h <<= 1)
+		;
 
 	if (tex_h != oh || tex_w != ow)
 		tex = realloc(tex, tex_h * tex_w * 3 + tex_h * sizeof(rgb_t *));
@@ -213,7 +241,21 @@ void alloc_tex()
 void set_texture()
 {
 	alloc_tex();
-	calcular_mandelbrot();
+
+	pthread_t threads[NUM_THREADS];
+	pthread_attr_t attr;
+    void *status;
+
+	 // Initialize and set thread joinable
+  	 pthread_attr_init(&attr);
+  	 pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+
+	int rc = pthread_create(&threads[0], NULL, calcular_mandelbrot, (void *)0);
+	// free attribute and wait for the other threads
+	pthread_attr_destroy(&attr);
+	rc = pthread_join(threads[0], &status);
+	
+	// calcular_mandelbrot();
 
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -235,7 +277,7 @@ void mouseclick(int button, int state, int x, int y)
 
 	switch (button)
 	{
-	case GLUT_LEFT_BUTTON: // aumentar zoom  
+	case GLUT_LEFT_BUTTON: // aumentar zoom
 		if (scale > abs(x) * 1e-16 && scale > abs(y) * 1e-16)
 			scale /= 2;
 		break;
