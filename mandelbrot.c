@@ -19,7 +19,6 @@
 #define VAL 255
 #define NUM_THREADS 5
 
-
 void set_texture();
 
 struct thread_data
@@ -28,7 +27,8 @@ struct thread_data
 	char *message;
 };
 
-struct parametro_divisao{
+struct parametro_divisao
+{
 	double x_from;
 	double x_to;
 	double y_from;
@@ -140,9 +140,12 @@ void hsv_to_rgb(int hue, int min, int max, rgb_t *p)
 		hue = max - (hue - min);
 	if (!saturation)
 	{
-		p->r = p->g = p->b = 255 * (max - hue) / (max - min);
+		p->r = 255 * (max - hue) / (max - min);
+		p->g = 255 * (max - hue) / (max - min);
+		p->b = 255 * (max - hue) / (max - min);
 		return;
 	}
+	
 	double h = fmod(color_rotate + 1e-4 + 4.0 * (hue - min) / (max - min), 6);
 
 	double c = VAL * saturation;
@@ -225,39 +228,66 @@ void *calcular_mandelbrot(void *threadarg)
 	for (i = 0; i < height; i++)
 		for (j = 0, px = tex[i]; j < width; j++, px++)
 			hsv_to_rgb(*(unsigned short *)px, min, max, px);
-	
+
 	pthread_exit(NULL);
 }
 
-void* calc_mandel_by_xy(void* param_thread)
+void *calc_mandel_by_xy(void *param_thread)
 {
-	printf("Thread %d starting \n", pthread_self() );
-	struct parametro_divisao* param = (struct parametro_divisao*) param_thread;
-	int i, j, iter, min, max;
-	rgb_t *px;
-	double x, y, zx, zy, zx2, zy2;
-	min = max_iter; max = 0;
+	printf("Thread %d starting \n", pthread_self());
+	struct parametro_divisao *param = (struct parametro_divisao *)param_thread;
 
-	for (i = param->y_from; i < param->y_to; i++) {
+	int i;
+	int j;
+	int iter;
+	int min;
+	int max;
+	rgb_t *px;
+	double x;
+	double y;
+	double zx;
+	double zy;
+	double zx2;
+	double zy2;
+
+	min = max_iter;
+	max = 0;
+
+	for (i = param->y_from; i < param->y_to; i++)
+	{
 		px = tex[i];
 		y = (i - height / 2) * scale + cy;
-		for (j = 0; j < width; j++, px++) {
+		for (j = 0; j < width; j++, px++)
+		{
 			x = (j - width / 2) * scale + cx;
 			iter = 0;
 
 			zx = hypot(x - .25, y);
-			if (x < zx - 2 * zx * zx + .25) iter = max_iter;
-			if ((x + 1)*(x + 1) + y * y < 1 / 16) iter = max_iter;
+
+			if ((x < zx - 2 * zx * zx + .25) || ((x + 1) * (x + 1) + y * y < 1 / 16))
+			{
+				iter = max_iter;
+			}
 
 			zx = zy = zx2 = zy2 = 0;
-			for (; iter < max_iter && zx2 + zy2 < 4; iter++) {
+			for (; iter < max_iter && zx2 + zy2 < 4; iter++)
+			{
 				zy = 2 * zx * zy + y;
 				zx = zx2 - zy2 + x;
 				zx2 = zx * zx;
 				zy2 = zy * zy;
 			}
-			if (iter < min) min = iter;
-			if (iter > max) max = iter;
+
+			if (iter < min)
+			{
+				min = iter;
+			}
+
+			if (iter > max)
+			{
+				max = iter;
+			}
+
 			*(unsigned short *)px = iter;
 		}
 	}
@@ -266,7 +296,7 @@ void* calc_mandel_by_xy(void* param_thread)
 	// for (i = param->y_from; i < param->y_to; i++)
 	// 	for (j = param->x_from, px = tex[i]; j < param->x_to; j++, px++)
 	// 		hsv_to_rgb(*(unsigned short*)px, min, max, px);
-	
+
 	printf("Thread %d ending \n", pthread_self());
 
 	return NULL;
@@ -274,9 +304,14 @@ void* calc_mandel_by_xy(void* param_thread)
 
 void calc_mandel()
 {
-	int i, j, iter, min, max;
+	int i;
+	int j;
+	int iter;
+
 	rgb_t *px;
-	min = max_iter; max = 0;
+
+	int min = max_iter;
+	int max = 0;
 
 	double y_half = height / 2;
 	double x_half = width / 2;
@@ -291,15 +326,16 @@ void calc_mandel()
 	struct parametro_divisao param3;
 	struct parametro_divisao param4;
 
-	if (1 == 1){
-		param1.x_from = 0,0;
+	if (1 == 1)
+	{
+		param1.x_from = 0, 0;
 		param1.x_to = x_half;
-		param1.y_from = 0,0;
+		param1.y_from = 0, 0;
 		param1.y_to = y_half;
 
 		param2.x_from = x_half;
-	 	param2.x_to = height;
-		param2.y_from = 0,0;
+		param2.x_to = height;
+		param2.y_from = 0, 0;
 		param2.y_to = y_half;
 
 		param3.x_from = 0;
@@ -322,35 +358,36 @@ void calc_mandel()
 		pthread_join(thread_id3, NULL);
 		pthread_join(thread_id4, NULL);
 	}
-	else{
+	else
+	{
 		param1.x_from = 0;
 		param1.x_to = height;
 		param1.y_from = 0;
 		param1.y_to = width;
 
-		calc_mandel_by_xy((void*)&param1);
+		calc_mandel_by_xy((void *)&param1);
 	}
-	
+
 	printf("Desenhar...\n");
 
 	for (i = 0; i < height; i++)
 		for (j = 0, px = tex[i]; j < width; j++, px++)
-			hsv_to_rgb(*(unsigned short*)px, min, max, px);
+			hsv_to_rgb(*(unsigned short *)px, min, max, px);
 }
 
 void alloc_tex()
 {
 	int i;
-	int ow = tex_w;
-	int oh = tex_h;
+	int ow = tex_w; //text width
+	int oh = tex_h; // text height
 
-	for (tex_w = 1; tex_w < width; tex_w <<= 1)
-		;
-	for (tex_h = 1; tex_h < height; tex_h <<= 1)
-		;
+	for (tex_w = 1; tex_w < width; tex_w <<= 1);
+	for (tex_h = 1; tex_h < height; tex_h <<= 1);
 
 	if (tex_h != oh || tex_w != ow)
+	{
 		tex = realloc(tex, tex_h * tex_w * 3 + tex_h * sizeof(rgb_t *));
+	}
 
 	for (tex[0] = (rgb_t *)(tex + tex_h), i = 1; i < tex_h; i++)
 		tex[i] = tex[i - 1] + tex_w;
@@ -372,7 +409,7 @@ void alloc_tex()
 // 	// free attribute and wait for the other threads
 // 	pthread_attr_destroy(&attr);
 // 	rc = pthread_join(threads[0], &status);
-	
+
 // 	// calcular_mandelbrot();
 
 // 	glEnable(GL_TEXTURE_2D);
