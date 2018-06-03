@@ -145,7 +145,7 @@ void hsv_to_rgb(int hue, int min, int max, rgb_t *p)
 		p->b = 255 * (max - hue) / (max - min);
 		return;
 	}
-	
+
 	double h = fmod(color_rotate + 1e-4 + 4.0 * (hue - min) / (max - min), 6);
 
 	double c = VAL * saturation;
@@ -463,24 +463,38 @@ void mouseclick(int button, int state, int x, int y)
 
 void resize(int w, int h)
 {
+
+	//Alterar Resize para sempre ser divisivel por 2
+	printf("resizing... %d %d\n", w, h);
+
+	while(height % 2 != 0){
+		height--;
+	}
+	while(width % 2 != 0){
+		width--;
+	}
+
 	printf("resizing... %d %d\n", w, h);
 	width = w;
 	height = h;
 
 	glViewport(0, 0, w, h);
 	glOrtho(0, w, 0, h, -1, 1);
+	
 
 	set_texture();
 }
 
-void init_gfx(int *c, char **v)
+void iniciar_graphics(int *c, char **v)
 {
 	printf("iniciando...\n");
 	glutInit(c, v);
 	glutInitDisplayMode(GLUT_RGB);
 
-	width = 800;
-	height = 600;
+	/*Tamanho da janela*/
+	width = 1000;
+	height = 700;
+
 	glutInitWindowSize(width, height);
 
 	gwin = glutCreateWindow("Mandelbrot");
@@ -495,7 +509,7 @@ void init_gfx(int *c, char **v)
 
 int main(int c, char **v)
 {
-	init_gfx(&c, v);
+	iniciar_graphics(&c, v);
 	printf("Opções:\n\tr: Rotação de Cores\n\tc: Monocromático\n\ts: Screen Dump\n\t"
 		   "q: Sair\n\tMouse para Zoom\n");
 
