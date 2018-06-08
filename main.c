@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <string.h>
+#include <math.h>
+#include <GL/glut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 /* 
  * https://rosettacode.org/wiki/Mandelbrot_set#PPM_Interactive <---- OLHAR
@@ -29,6 +33,7 @@ void *helloWorld(void *threadarg)
 
 	char nome_arquivo[20];
 
+	printf("Threads: %d essa é: %d\n", numThreads, pthread_self());
 	sprintf(nome_arquivo, "%ds.ppm", pthread_self());
 
 	FILE *fp = fopen(nome_arquivo, "wb");
