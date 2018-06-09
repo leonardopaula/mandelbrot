@@ -14,5 +14,13 @@
             <file>file:/home/leonardo/NetBeansProjects/Mandelbrot/main.c</file>
             <file>file:/home/leonardo/NetBeansProjects/Mandelbrot/listaEncadeada.c</file>
         </group>
+        <group name="PAD">
+            <file>file:/Users/gustavolazarottoschroeder/Documents/GitHub/mandelbrot/NetBeans/Mandelbrot/mandelbrot.h</file>
+            <file>file:/Users/gustavolazarottoschroeder/Documents/GitHub/mandelbrot/NetBeans/Mandelbrot/main.c</file>
+            <file>file:/Users/gustavolazarottoschroeder/Documents/GitHub/mandelbrot/NetBeans/Mandelbrot/listaEncadeada.c</file>
+            <file>file:/Users/gustavolazarottoschroeder/Documents/GitHub/mandelbrot/NetBeans/Mandelbrot/mandelbrot.c</file>
+            <file>file:/Users/gustavolazarottoschroeder/Documents/GitHub/mandelbrot/NetBeans/Mandelbrot/listaEncadeada.h</file>
+            <file>file:/Users/gustavolazarottoschroeder/Documents/GitHub/mandelbrot/NetBeans/Mandelbrot/estrutura.h</file>
+        </group>
     </open-files>
 </project-private>

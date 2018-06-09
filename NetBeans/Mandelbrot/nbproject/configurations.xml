@@ -43,7 +43,6 @@
         <linkerTool>
           <linkerLibItems>
             <linkerLibStdlibItem>Mathematics</linkerLibStdlibItem>
-            <linkerOptionItem>-lGL</linkerOptionItem>
             <linkerOptionItem>-lglut</linkerOptionItem>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
           </linkerLibItems>

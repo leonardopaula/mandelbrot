@@ -328,10 +328,10 @@ void calc_mandel()
 
 	if (1 == 1)
 	{
-		param1.x_from = 0, 0;
-		param1.x_to = x_half;
-		param1.y_from = 0, 0;
-		param1.y_to = y_half;
+		// param1.x_from = 0, 0;
+		// param1.x_to = x_half;
+		// param1.y_from = 0, 0;
+		// param1.y_to = y_half;
 
 		param2.x_from = x_half;
 		param2.x_to = height;
@@ -343,20 +343,20 @@ void calc_mandel()
 		param3.y_from = y_half;
 		param3.y_to = width;
 
-		param4.x_from = x_half;
-		param4.x_to = height;
-		param4.y_from = y_half;
-		param4.y_to = width;
+		// param4.x_from = x_half;
+		// param4.x_to = height;
+		// param4.y_from = y_half;
+		// param4.y_to = width;
 
-		pthread_create(&thread_id1, NULL, &calc_mandel_by_xy, &param1);
+		// pthread_create(&thread_id1, NULL, &calc_mandel_by_xy, &param1);
 		pthread_create(&thread_id2, NULL, &calc_mandel_by_xy, &param2);
 		pthread_create(&thread_id3, NULL, &calc_mandel_by_xy, &param3);
-		pthread_create(&thread_id4, NULL, &calc_mandel_by_xy, &param4);
+		// pthread_create(&thread_id4, NULL, &calc_mandel_by_xy, &param4);
 
-		pthread_join(thread_id1, NULL);
+		// pthread_join(thread_id1, NULL);
 		pthread_join(thread_id2, NULL);
 		pthread_join(thread_id3, NULL);
-		pthread_join(thread_id4, NULL);
+		// pthread_join(thread_id4, NULL);
 	}
 	else
 	{
@@ -368,7 +368,7 @@ void calc_mandel()
 		calc_mandel_by_xy((void *)&param1);
 	}
 
-	printf("Desenhar...\n");
+	// printf("Desenhar...\n");
 
 	for (i = 0; i < height; i++)
 		for (j = 0, px = tex[i]; j < width; j++, px++)
