@@ -9,8 +9,25 @@ typedef struct
 	Ponto inicial;
 	Ponto final;
 } Trabalho;
+typedef Trabalho* trab;
 
-typedef struct 
+typedef struct {
+    void   *dados;
+    void *proximo;
+} No;
+typedef No* no;
+
+typedef struct ListaEncadeada {
+	no       inicial;
+	int      tamanho;
+	int tamanhoDados; // Define o tamanho dos dados (Trabalho ou Resultado)
+} ListaEncadeada;
+
+typedef ListaEncadeada* lista;
+
+struct dadosCompartilhados
 {
-	Trabalho *t;
-} Dados_compartilhados, *ptr_thread_arg;
+	int comprimento;
+	int altura;
+	lista sacoDeTarefas;
+};

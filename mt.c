@@ -7,14 +7,19 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "estruturas.h"
+#include "lista_encadeada.c"
 
+#define COMPRIMENTO_JANELA 800
+#define ALTURA_JANELA 600
 #define NUM_TRABALHADORES 4
 #define DIVISOR_PIXEL 200
 
-Dados_compartilhados dc;
+struct dadosCompartilhados dc;
+
 void * trabalhador(void *str);
 pthread_t threads[NUM_TRABALHADORES + 1]; // + Thread que imprime
 pthread_mutex_t mut;
+void divide_trabalhos();
 
 /*
  * argv[1] = width
@@ -22,46 +27,65 @@ pthread_mutex_t mut;
  */
 int main(int argc, char *argv[])
 {
-	int comprimento = atoi(argv[1]);
-	int altura      = atoi(argv[2]);
-	int tam_x       = (int) comprimento / DIVISOR_PIXEL;
-	int tam_y       = (int) altura / DIVISOR_PIXEL;
+	dc.comprimento = COMPRIMENTO_JANELA;
+	dc.altura      = ALTURA_JANELA;
 
-	dc.t = (Trabalho *)malloc((tam_x * tam_y) * sizeof(Trabalho));
-
-	pthread_mutex_init(&mut, NULL);
+	dc.sacoDeTarefas = inicia_le(sizeof(Trabalho));
 
 	// Lança as threads (workers)
 	for(int i = 0; i < NUM_TRABALHADORES; i++)
-		pthread_create(&threads[i], NULL, trabalhador, &dc);
+		pthread_create(&threads[i], NULL, &trabalhador, &dc);
+
+	divide_trabalhos();
 
 	for(int i = 0; i < NUM_TRABALHADORES; i++)
 		pthread_join(threads[i], NULL);
 
-
-	int indice = 0;
-	for(int j = 0; j < tam_y; j++)
-	{
-		for(int i = 0; i < tam_x; i++)
-		{
-			dc.t[indice++].inicial.x = i*DIVISOR_PIXEL;
-			dc.t[indice++].inicial.y = j*DIVISOR_PIXEL;
-
-			dc.t[indice++].final.x = i*DIVISOR_PIXEL + DIVISOR_PIXEL;
-			dc.t[indice++].final.y = j*DIVISOR_PIXEL + DIVISOR_PIXEL;
-
-			indice++;
-			//printf("%d x %d : ", i*DIVISOR_PIXEL, j*DIVISOR_PIXEL);
-			//printf(" %d x %d\n", i*DIVISOR_PIXEL + DIVISOR_PIXEL, j*DIVISOR_PIXEL + DIVISOR_PIXEL);
-		}
-	}
 	// Mestre (main thread) gera os trabalhos (x,y inicial/final)
 	//printf("%d x %d\n", comprimento, altura);
 }
 
 void * trabalhador(void *arg) 
 {
-	ptr_thread_arg targ = (ptr_thread_arg) arg;
+	struct dadosCompartilhados *dc = (struct dadosCompartilhados *)arg;
 	
-	printf("Tem algo? %d x %d\n", arg);
+	printf("Opa => %d\n", dc->sacoDeTarefas->tamanho);
+
+	if (dc->sacoDeTarefas->tamanho > 0)
+	{
+		printf("-> Opa => %d\n", dc->sacoDeTarefas->tamanho);
+		trab t;
+		t = remove_le(dc->sacoDeTarefas);
+		//printf("Opa => %d\n", dc->sacoDeTarefas->tamanho);
+	}
+
+    //printf("Tem algo? %d x %d\n", t->inicial.x, t->inicial.y);
+
+    
+}
+
+void divide_trabalhos()
+{
+	int tam_x       = (int) dc.comprimento / DIVISOR_PIXEL;
+	int tam_y       = (int) dc.altura / DIVISOR_PIXEL;
+	Trabalho* t;
+
+	// Tratar o resto da divisão, caso haja
+	int indice = 0;
+	for(int j = 0; j < tam_y; j++)
+	{
+		for(int i = 0; i < tam_x; i++)
+		{
+			t = (Trabalho *) malloc(sizeof(Trabalho));
+			memset(t, 0, sizeof(Trabalho));
+
+			t->inicial.x = i*DIVISOR_PIXEL;
+			t->inicial.y = j*DIVISOR_PIXEL;
+
+			t->final.x = i*DIVISOR_PIXEL + DIVISOR_PIXEL;
+			t->final.y = j*DIVISOR_PIXEL + DIVISOR_PIXEL;
+
+			adiciona_le(dc.sacoDeTarefas, t);
+		}
+	}
 }
