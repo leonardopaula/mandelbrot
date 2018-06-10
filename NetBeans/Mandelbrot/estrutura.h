@@ -78,6 +78,11 @@ typedef struct
 } resultado_trabalho_t;
 typedef resultado_trabalho_t* resultado_trabalho;
 
+typedef struct
+{
+	unsigned char r, g, b;
+} rgb_t;
+
 #ifdef __cplusplus
 }
 #endif
