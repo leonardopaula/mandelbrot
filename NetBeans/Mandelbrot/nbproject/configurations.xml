@@ -45,6 +45,10 @@
             <linkerLibStdlibItem>Mathematics</linkerLibStdlibItem>
             <linkerOptionItem>-lglut</linkerOptionItem>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
+            <linkerLibLibItem>GL</linkerLibLibItem>
+            <linkerLibLibItem>GLU</linkerLibLibItem>
+            <linkerLibLibItem>glut</linkerLibLibItem>
+            <linkerLibLibItem>GLEW</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>

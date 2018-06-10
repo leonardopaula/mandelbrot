@@ -6,14 +6,6 @@
     </data>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/home/leonardo/NetBeansProjects/Mandelbrot/estrutura.h</file>
-            <file>file:/home/leonardo/NetBeansProjects/Mandelbrot/mandelbrot.c</file>
-            <file>file:/home/leonardo/NetBeansProjects/Mandelbrot/mandelbrot.h</file>
-            <file>file:/home/leonardo/NetBeansProjects/Mandelbrot/listaEncadeada.h</file>
-            <file>file:/home/leonardo/NetBeansProjects/Mandelbrot/main.c</file>
-            <file>file:/home/leonardo/NetBeansProjects/Mandelbrot/listaEncadeada.c</file>
-        </group>
         <group name="PAD">
             <file>file:/Users/gustavolazarottoschroeder/Documents/GitHub/mandelbrot/NetBeans/Mandelbrot/mandelbrot.h</file>
             <file>file:/Users/gustavolazarottoschroeder/Documents/GitHub/mandelbrot/NetBeans/Mandelbrot/main.c</file>
@@ -21,6 +13,9 @@
             <file>file:/Users/gustavolazarottoschroeder/Documents/GitHub/mandelbrot/NetBeans/Mandelbrot/mandelbrot.c</file>
             <file>file:/Users/gustavolazarottoschroeder/Documents/GitHub/mandelbrot/NetBeans/Mandelbrot/listaEncadeada.h</file>
             <file>file:/Users/gustavolazarottoschroeder/Documents/GitHub/mandelbrot/NetBeans/Mandelbrot/estrutura.h</file>
+        </group>
+        <group>
+            <file>file:/home/gustavo/git-repos/mandelbrot/NetBeans/Mandelbrot/main.c</file>
         </group>
     </open-files>
 </project-private>

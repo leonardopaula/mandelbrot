@@ -23,6 +23,9 @@ typedef struct
 {
     int x;
     int y;
+    float r;
+    float g;
+    float b;
 } ponto_t;
 typedef ponto_t ponto;
 
@@ -77,6 +80,11 @@ typedef struct
     int         total;
 } resultado_trabalho_t;
 typedef resultado_trabalho_t* resultado_trabalho;
+
+typedef struct
+{
+	unsigned char r, g, b;
+} rgb_t;
 
 #ifdef __cplusplus
 }
