@@ -147,6 +147,12 @@ int main(int argc, char *argv[]) {
     printf("Fim do programa");
 }
 
+void display() { 
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+       /* drawing commands would go here, if we had any yet... */
+    glutSwapBuffers();
+}
+
 void * trabalhador(void *arg) {
     int executado = 0;
     struct dadosCompartilhados *dc = (struct dadosCompartilhados *) arg;
@@ -168,15 +174,17 @@ void divide_trabalhos() {
 
     // Tratar o resto da divisão, caso haja
     int indice = 0;
-    for (int j = 0; j < tam_y; j++) {
-        for (int i = 0; i < tam_x; i++) {
-            t = (trabalho_t *) malloc(sizeof (trabalho_t));
-            memset(t, 0, sizeof (trabalho_t)); //aloca esta parte da memoria para esta tarefa
+    for(int j = 0; j < tam_y; j++)
+    {
+	for(int i = 0; i < tam_x; i++)
+	{
+            t = (trabalho_t *) malloc(sizeof(trabalho_t));
+            memset(t, 0, sizeof(trabalho_t)); //aloca esta parte da memoria para esta tarefa
             t->inicial.x = i * DIVISOR_PIXEL;
             t->inicial.y = j * DIVISOR_PIXEL;
             t->final.x = i * DIVISOR_PIXEL + DIVISOR_PIXEL;
             t->final.y = j * DIVISOR_PIXEL + DIVISOR_PIXEL;
-
+            
             adiciona_le(dc.sacoDeTarefas, t);
         }
     }
