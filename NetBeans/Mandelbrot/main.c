@@ -43,8 +43,9 @@ int gwin;
 ponto_t point;
 
 void display(void) {
-    //glClearColor(1.0, 1.0, 1.0, 0.0);
-    //glClear(GL_COLOR_BUFFER_BIT); // clear display window
+    glClearColor(1.0, 1.0, 1.0, 0.0);
+    printf("Limpei tudo\n");
+    glClear(GL_COLOR_BUFFER_BIT); // clear display window
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -59,11 +60,11 @@ void display(void) {
 
     //glPointSize(5.0f);
     glBegin(GL_POINTS);
-    int x = point.x;
-    int y = point.y;
+        int x = point.x;
+        int y = point.y;
 
-    glColor3f(point.r, point.g, point.b);
-    glVertex2i(x, h - y);
+        glColor3f(point.r, point.g, point.b);
+        glVertex2i(x, h - y);
 
     glEnd();
 
@@ -78,29 +79,40 @@ void mouse(int button, int state, int x, int y) {
         point.g = 1.0;
         point.b = 0.0;
     }
-    glutPostRedisplay();
+
+    glBegin(GLUT_SINGLE | GLUT_RGB);
+        glVertex2i(x, 600 - y);
+        printf("%dx%d\n", x, (600-y));
+    glEnd();
+    
+    glFlush();
+    //glutPostRedisplay();
 }
 
 void draw(int x, int y, float r, float g, float b) {
+    printf("?");
     point.x = x;
     point.y = y;
     point.r = r;
     point.g = g;
     point.b = b;
-    display();
+    
+    glColor3f(point.r, point.g, point.b);
+    
+    glBegin(GLUT_SINGLE | GLUT_RGB);
+        glVertex2i(x, 600 - y);
+    glEnd;
+    
+    glFlush();
+    
     //printf("Desnhei");
 }
 
 void drawObj(ponto_t p) {
     point = p;
-    display();
-    //printf("Desnhei");
+    //display();
 }
 
-/*
- * argv[1] = width
- * argv[2] = height
- */
 int main(int argc, char *argv[]) {
     dc.comprimento = COMPRIMENTO_JANELA;
     dc.altura = ALTURA_JANELA;
@@ -120,30 +132,13 @@ int main(int argc, char *argv[]) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowSize(COMPRIMENTO_JANELA, ALTURA_JANELA);
-    glutCreateWindow("Trabalho PAD");
+    glClearColor(1.0, 1.0, 1.0, 0.0);
+    glutCreateWindow("Fractal de Mandelbrot");
 
-    //glutMouseFunc(mouse);
+    glutMouseFunc(mouse);
     glutDisplayFunc(display);
-
-    //Exemplo passando os paramentros
-    int i;
-    int valuex = 100;
-    int valuey = 50;
-    for (i = 0; i < 150; i++) {
-        draw(valuex, valuey, 1.0, 0.0, 0.0);
-        valuex += 20;
-        valuey += 20;
-    }
     
-    //exemplo passando um objeto
-    ponto_t ponto;
-    ponto.x = 20;
-    ponto.y = 300;
-    ponto.r = 0.6;
-    ponto.g = 0.2;
-    ponto.b = 0.2;
-    drawObj(ponto);
-
+    
     glutMainLoop();
 
     printf("Fim do programa");
