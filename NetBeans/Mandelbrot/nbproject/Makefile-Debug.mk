@@ -37,7 +37,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/listaEncadeada.o \
 	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/mandelbrot.o
+	${OBJECTDIR}/mandelbrot.o \
+	${OBJECTDIR}/threads.o
 
 
 # C Compiler Flags
@@ -78,6 +79,11 @@ ${OBJECTDIR}/mandelbrot.o: mandelbrot.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/mandelbrot.o mandelbrot.c
+
+${OBJECTDIR}/threads.o: threads.c
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/threads.o threads.c
 
 # Subprojects
 .build-subprojects:

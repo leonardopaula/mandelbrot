@@ -10,6 +10,8 @@ lista inicia_le(int tamanhoDados, int tamanhoTrabalho)
     l->final   = NULL;
     
     pthread_mutex_init(&l->mutex, NULL);
+    pthread_cond_init(&l->vcProdutor, NULL);
+    pthread_cond_init(&l->vcConsumidor, NULL);
 
     l->tamanho = 0;
     l->tamanhoDados = tamanho;

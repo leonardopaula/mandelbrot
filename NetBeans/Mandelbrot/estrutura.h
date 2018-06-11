@@ -49,6 +49,7 @@ struct dadosCompartilhados
     int comprimento;
     int altura;
     lista sacoDeTarefas;
+    lista sacoDeResultados;
 };
 
 typedef GLfloat gl_cor[3];

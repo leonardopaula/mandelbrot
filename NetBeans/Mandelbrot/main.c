@@ -9,7 +9,7 @@
 #include "listaEncadeada.h"
 #include "estrutura.h"
 #include "mandelbrot.h"
-
+#include "threads.h"
 
 #define COMPRIMENTO_JANELA 800
 #define ALTURA_JANELA 600
@@ -44,22 +44,6 @@ int main(int argc, char *argv[])
 	pthread_join(threads[i], NULL);
 
     printf("Fim do programa");
-}
-
-void * trabalhador(void *arg) 
-{
-    int executado = 0;
-    struct dadosCompartilhados *dc = (struct dadosCompartilhados *)arg;
-
-    while(dc->sacoDeTarefas->tamanhoTrabalho > dc->sacoDeTarefas->computado)
-    {
-        trab t;
-        t = remove_le(dc->sacoDeTarefas);
-        
-        // Calcula o Mandelbrot
-
-    }
-    printf("Acabei! e fiz: %d\n", executado);
 }
 
 void divide_trabalhos()

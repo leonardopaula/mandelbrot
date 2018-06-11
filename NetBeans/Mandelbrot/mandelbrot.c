@@ -1,51 +1,40 @@
 #include "estrutura.h"
+#include <stdio.h>
+
 #define MAX_ITERACOES 5000
 
-/*
 void mandelbrot_xy(trab trabalho, double escala, int cx, int cy) {
-    
-    int i, j, iter, min, max = 0;
-    gl_cor *px;
-    double x, y, zx, zy, zx2, zy2;
 
-    min = max_iter;
-    max = 0;
+    int linha, coluna = 0;
+    int comprimento = trabalho->final.x - trabalho->inicial.x;
+    int altura = trabalho->final.y - trabalho->inicial.y;
+    unsigned char branco[3] = {0, 0, 0};
+    unsigned char preto[3] = {255, 255, 255};
 
-    for (i = trabalho->inicial.y; i < trabalho->final.y; i++)
+    for (linha = trabalho->inicial.y; linha < trabalho->final.y; linha++)
     {
-        //px = tex[i];
-	y = (i - height / 2) * scale + cy;
-	for (j = 0; j < width; j++, px++)
+        for (coluna = trabalho->inicial.x; coluna < trabalho->final.x; coluna++)
 	{
-            x = (j - width / 2) * scale + cx;
-            iter = 0;
-            zx = hypot(x - .25, y);
-
-            if ((x < zx - 2 * zx * zx + .25) || ((x + 1) * (x + 1) + y * y < 1 / 16))
+            double real_c = (coluna - comprimento / 2) * cx / comprimento;
+            double im_c = (linha - altura / 2) * cy / comprimento;
+            double x = 0, y = 0;
+            int i = 0;
+            while (x * x + y * y < 4 && i < MAX_ITERACOES)
             {
-                iter = max_iter;
+                double x_new = x * x - y * y + real_c;
+                y = 2 * x * y + im_c;
+		x = x_new;
+		i++;
             }
 
-			zx = zy = zx2 = zy2 = 0;
-			for (; iter < max_iter && zx2 + zy2 < 4; iter++)
-			{
-				zy = 2 * zx * zy + y;
-				zx = zx2 - zy2 + x;
-				zx2 = zx * zx;
-				zy2 = zy * zy;
-			}
-
-			if (iter < min)
-			{
-				min = iter;
-			}
-
-			if (iter > max)
-			{
-				max = iter;
-			}
-
-			*(unsigned short *)px = iter;
-		}
-	}
-}*/
+            if (i < MAX_ITERACOES)
+            {
+                printf("(%d,%d) Branco\n",coluna, linha);
+            }
+            else
+            {
+                printf("(%d,%d) Preto\n",coluna, linha);
+            }
+        }
+    }
+}
