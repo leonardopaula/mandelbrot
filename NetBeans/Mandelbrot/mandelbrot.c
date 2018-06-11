@@ -29,11 +29,11 @@ void mandelbrot_xy(trab trabalho, double escala, int cx, int cy) {
 
             if (i < MAX_ITERACOES)
             {
-                printf("(%d,%d) Branco\n",coluna, linha);
+                //printf("(%d,%d) Branco\n",coluna, linha);
             }
             else
             {
-                printf("(%d,%d) Preto\n",coluna, linha);
+                //printf("(%d,%d) Preto\n",coluna, linha);
             }
         }
     }

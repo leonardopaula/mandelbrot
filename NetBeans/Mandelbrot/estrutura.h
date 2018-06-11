@@ -2,8 +2,18 @@
 #define ESTRUTURA_H
 
 #include <signal.h>
-#include <GL/gl.h>
 #include <GL/glut.h>
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#ifdef _WIN32
+#include <windows.h>
+#endif
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
+#include <sys/types.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -13,6 +23,9 @@ typedef struct
 {
     int x;
     int y;
+    float r;
+    float g;
+    float b;
 } ponto_t;
 typedef ponto_t ponto;
 
@@ -68,6 +81,11 @@ typedef struct
     int         total;
 } resultado_trabalho_t;
 typedef resultado_trabalho_t* resultado_trabalho;
+
+typedef struct
+{
+	unsigned char r, g, b;
+} rgb_t;
 
 #ifdef __cplusplus
 }

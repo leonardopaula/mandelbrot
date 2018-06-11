@@ -55,7 +55,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-lm -lGL -lglut -lpthread
+LDLIBSOPTIONS=-lm -lglut -lpthread -lGL -lGLU -lglut
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
