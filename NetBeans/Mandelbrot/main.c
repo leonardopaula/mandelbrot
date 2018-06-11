@@ -147,12 +147,6 @@ int main(int argc, char *argv[]) {
     printf("Fim do programa");
 }
 
-void display() { 
-    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-       /* drawing commands would go here, if we had any yet... */
-    glutSwapBuffers();
-}
-
 void * trabalhador(void *arg) {
     int executado = 0;
     struct dadosCompartilhados *dc = (struct dadosCompartilhados *) arg;
