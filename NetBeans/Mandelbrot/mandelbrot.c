@@ -1,9 +1,11 @@
+#include "listaEncadeada.h"
 #include "estrutura.h"
+#include "glut.h"
 #include <stdio.h>
 
 #define MAX_ITERACOES 5000
 
-void mandelbrot_xy(trab trabalho, double escala, int cx, int cy) {
+void mandelbrot_xy(trab trabalho, double escala, int cx, int cy, lista resultados) {
 
     int linha, coluna = 0;
     int comprimento = trabalho->final.x - trabalho->inicial.x;
@@ -27,14 +29,31 @@ void mandelbrot_xy(trab trabalho, double escala, int cx, int cy) {
 		i++;
             }
 
+            ponto* p;
+            p = (ponto_t *) malloc(sizeof(ponto_t));
+            memset(p, 0, sizeof(ponto_t));
+
             if (i < MAX_ITERACOES)
             {
-                //printf("(%d,%d) Branco\n",coluna, linha);
+                p->r = 1.0;
+                p->g = 1.0;
+                p->b = 1.0;
+                p->x = coluna;
+                p->y = linha;
+                // draw(coluna, linha, 1.0, 1.0, 1.0);
+                // printf("(%d,%d) Branco\n",coluna, linha);
             }
             else
             {
-                //printf("(%d,%d) Preto\n",coluna, linha);
+                p->r = 0.0;
+                p->g = 0.0;
+                p->b = 0.0;
+                p->x = coluna;
+                p->y = linha;
+                // draw(coluna, linha, 0.0, 0.0, 0.0);
+                // printf("(%d,%d) Preto\n",coluna, linha);
             }
+            adiciona_le(resultados, p);
         }
     }
 }

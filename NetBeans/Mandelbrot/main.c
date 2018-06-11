@@ -19,6 +19,7 @@
 #include "estrutura.h"
 #include "mandelbrot.h"
 #include "threads.h"
+#include "glut.h"
 
 
 #define COMPRIMENTO_JANELA 800
@@ -29,6 +30,7 @@
 struct dadosCompartilhados dc;
 
 void * trabalhador(void *str);
+void * desenhista(void *str);
 pthread_t threads[NUM_TRABALHADORES + 1]; // + Thread que imprime
 void divide_trabalhos();
 void display(void);
@@ -42,109 +44,59 @@ int gwin;
 
 ponto_t point;
 
-void display(void) {
-    glClearColor(1.0, 1.0, 1.0, 0.0);
-    printf("Limpei tudo\n");
-    glClear(GL_COLOR_BUFFER_BIT); // clear display window
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    const double w = glutGet(GLUT_WINDOW_WIDTH);
-    const double h = glutGet(GLUT_WINDOW_HEIGHT);
-    gluOrtho2D(0.0, w, 0.0, h);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    glColor3f(1.0, 1.0, 1.0);
-
-    //glPointSize(5.0f);
-    glBegin(GL_POINTS);
-        int x = point.x;
-        int y = point.y;
-
-        glColor3f(point.r, point.g, point.b);
-        glVertex2i(x, h - y);
-
-    glEnd();
-
-    glFlush();
-}
-
-void mouse(int button, int state, int x, int y) {
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        point.x = x;
-        point.y = y;
-        point.r = 0.0;
-        point.g = 1.0;
-        point.b = 0.0;
-    }
-
-    glBegin(GLUT_SINGLE | GLUT_RGB);
-        glVertex2i(x, 600 - y);
-        printf("%dx%d\n", x, (600-y));
-    glEnd();
-    
-    glFlush();
-    //glutPostRedisplay();
-}
-
-void draw(int x, int y, float r, float g, float b) {
-    printf("?");
-    point.x = x;
-    point.y = y;
-    point.r = r;
-    point.g = g;
-    point.b = b;
-    
-    glColor3f(point.r, point.g, point.b);
-    
-    glBegin(GLUT_SINGLE | GLUT_RGB);
-        glVertex2i(x, 600 - y);
-    glEnd;
-    
-    glFlush();
-    
-    //printf("Desnhei");
-}
-
-void drawObj(ponto_t p) {
-    point = p;
-    //display();
-}
-
 int main(int argc, char *argv[]) {
+    printf("?");
     dc.comprimento = COMPRIMENTO_JANELA;
     dc.altura = ALTURA_JANELA;
     int tamanhoTrabalho = (int) dc.comprimento / DIVISOR_PIXEL * (int) dc.altura / DIVISOR_PIXEL;
 
-    dc.sacoDeTarefas = inicia_le(sizeof (trabalho_t), tamanhoTrabalho);
-
-    // Lança as threads (workers)
-    for (int i = 0; i < NUM_TRABALHADORES; i++)
-        pthread_create(&threads[i], NULL, &trabalhador, &dc);
-
-    divide_trabalhos();
-
-    for (int i = 0; i < NUM_TRABALHADORES; i++)
-        pthread_join(threads[i], NULL);
+    dc.sacoDeTarefas    = inicia_le(sizeof (trabalho_t), tamanhoTrabalho);
+    dc.sacoDeResultados = inicia_le(sizeof (ponto_t), dc.comprimento*dc.altura);
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowSize(COMPRIMENTO_JANELA, ALTURA_JANELA);
     glClearColor(1.0, 1.0, 1.0, 0.0);
     glutCreateWindow("Fractal de Mandelbrot");
+    glClearColor(1.0, 1.0, 1.0, 0.0);
+    glClear(GL_COLOR_BUFFER_BIT); // clear display window
 
-    glutMouseFunc(mouse);
-    glutDisplayFunc(display);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
     
+
+    glutDisplayFunc(display);
+    glutMouseFunc(mouse);
+    
+    
+    draw(780,550,1.0,0.0,0.0);
     
     glutMainLoop();
+        // Lança as threads (workers)
+        for (int i = 0; i <= NUM_TRABALHADORES; i++)
+        {
+
+            if (i == NUM_TRABALHADORES){
+                pthread_create(&threads[i], NULL, &desenhista, &dc);
+            } else
+                pthread_create(&threads[i], NULL, &trabalhador, &dc);
+        }
+
+        divide_trabalhos();
+
+        for (int i = 0; i <= NUM_TRABALHADORES; i++)
+        {
+            pthread_join(threads[i], NULL);
+            printf("Join %d \n", i);
+        }
+        
+    
 
     printf("Fim do programa");
 }
 
 void divide_trabalhos() {
+    printf("Dividindo...");
     int tam_x = (int) dc.comprimento / DIVISOR_PIXEL;
     int tam_y = (int) dc.altura / DIVISOR_PIXEL;
 

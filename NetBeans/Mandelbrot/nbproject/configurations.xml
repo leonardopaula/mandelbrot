@@ -5,6 +5,7 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>estrutura.h</itemPath>
+      <itemPath>glut.h</itemPath>
       <itemPath>listaEncadeada.h</itemPath>
       <itemPath>mandelbrot.h</itemPath>
       <itemPath>threads.h</itemPath>
@@ -16,6 +17,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>glut.c</itemPath>
       <itemPath>listaEncadeada.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>mandelbrot.c</itemPath>
@@ -55,6 +57,10 @@
       </compileType>
       <item path="estrutura.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="glut.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="glut.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="listaEncadeada.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="listaEncadeada.h" ex="false" tool="3" flavor2="0">
@@ -91,6 +97,10 @@
         </asmTool>
       </compileType>
       <item path="estrutura.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="glut.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="glut.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="listaEncadeada.c" ex="false" tool="0" flavor2="0">
       </item>
