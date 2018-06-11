@@ -20,7 +20,6 @@
 #include "mandelbrot.h"
 #include "threads.h"
 
-
 #define COMPRIMENTO_JANELA 800
 #define ALTURA_JANELA 600
 #define NUM_TRABALHADORES 4
@@ -43,7 +42,7 @@ int gwin;
 ponto_t point;
 
 void display(void) {
-    //glClearColor(1.0, 1.0, 1.0, 0.0);
+    glClearColor(0.0, 0.0, 0.0, 0.0);
     //glClear(GL_COLOR_BUFFER_BIT); // clear display window
 
     glMatrixMode(GL_PROJECTION);
@@ -122,7 +121,7 @@ int main(int argc, char *argv[]) {
     glutInitWindowSize(COMPRIMENTO_JANELA, ALTURA_JANELA);
     glutCreateWindow("Trabalho PAD");
 
-    //glutMouseFunc(mouse);
+    glutMouseFunc(mouse);
     glutDisplayFunc(display);
 
     //Exemplo passando os paramentros
