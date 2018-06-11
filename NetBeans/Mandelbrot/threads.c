@@ -27,9 +27,9 @@ void * desenhista(void *arg)
     {
         ponto* p;
         p = remove_le(dc->sacoDeResultados);
-        printf("%d x %d", p->x, p->y);
+        //printf("%d x %d", p->x, p->y);
         
-        //draw(p->x, p->y, p->r, p->g, p->b);
+        draw(p->x, p->y, p->r, p->g, p->b);
         
         //printf("--> %d x %d", p->x, p->y);
     }

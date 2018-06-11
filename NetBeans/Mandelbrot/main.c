@@ -45,7 +45,6 @@ int gwin;
 ponto_t point;
 
 int main(int argc, char *argv[]) {
-    printf("?");
     dc.comprimento = COMPRIMENTO_JANELA;
     dc.altura = ALTURA_JANELA;
     int tamanhoTrabalho = (int) dc.comprimento / DIVISOR_PIXEL * (int) dc.altura / DIVISOR_PIXEL;
@@ -67,11 +66,7 @@ int main(int argc, char *argv[]) {
 
     glutDisplayFunc(display);
     glutMouseFunc(mouse);
-    
-    
-    draw(780,550,1.0,0.0,0.0);
-    
-    glutMainLoop();
+
         // Lança as threads (workers)
         for (int i = 0; i <= NUM_TRABALHADORES; i++)
         {
@@ -90,7 +85,7 @@ int main(int argc, char *argv[]) {
             printf("Join %d \n", i);
         }
         
-    
+    glutMainLoop();    
 
     printf("Fim do programa");
 }
