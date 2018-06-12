@@ -28,6 +28,7 @@
 #define DIVISOR_PIXEL 200
 
 struct dadosCompartilhados dc;
+h_glut oGL = NULL;
 
 void * trabalhador(void *str);
 void * desenhista(void *str);
@@ -36,6 +37,7 @@ void divide_trabalhos();
 void display(void);
 void mouse(int button, int state, int x, int y);
 void draw(int x, int y, float r, float g, float b);
+//void* draw(int x, int y, float r, float g, float b);
 void drawObj(ponto_t p);
 
 int tex_w, tex_h;
@@ -52,11 +54,14 @@ int main(int argc, char *argv[]) {
     dc.sacoDeTarefas    = inicia_le(sizeof (trabalho_t), tamanhoTrabalho);
     dc.sacoDeResultados = inicia_le(sizeof (ponto_t), dc.comprimento*dc.altura);
 
+    oGL = malloc(sizeof(glut_t));
+    memset(oGL, 0, sizeof(glut_t));
+    
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowSize(COMPRIMENTO_JANELA, ALTURA_JANELA);
     glClearColor(1.0, 1.0, 1.0, 0.0);
-    glutCreateWindow("Fractal de Mandelbrot");
+    oGL->id_janela = glutCreateWindow("Fractal de Mandelbrot");
     glClearColor(1.0, 1.0, 1.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT); // clear display window
 
@@ -66,25 +71,8 @@ int main(int argc, char *argv[]) {
 
     glutDisplayFunc(display);
     glutMouseFunc(mouse);
+    glutKeyboardFunc(keyboard);
 
-        // Lança as threads (workers)
-        for (int i = 0; i <= NUM_TRABALHADORES; i++)
-        {
-
-            if (i == NUM_TRABALHADORES){
-                pthread_create(&threads[i], NULL, &desenhista, &dc);
-            } else
-                pthread_create(&threads[i], NULL, &trabalhador, &dc);
-        }
-
-        divide_trabalhos();
-
-        for (int i = 0; i <= NUM_TRABALHADORES; i++)
-        {
-            pthread_join(threads[i], NULL);
-            printf("Join %d \n", i);
-        }
-        
     glutMainLoop();    
 
     printf("Fim do programa");
@@ -129,4 +117,30 @@ void alloc_tex() {
 
     for (tex[0] = (rgb_t *) (tex + tex_h), i = 1; i < tex_h; i++)
         tex[i] = tex[i - 1] + tex_w;
+}
+
+
+void rodar()
+{
+    // Lança as threads (workers)
+    for (int i = 0; i <= NUM_TRABALHADORES; i++)
+    {
+        if (i == NUM_TRABALHADORES){
+            pthread_create(&threads[i], NULL, &desenhista, &dc);
+        } else
+            pthread_create(&threads[i], NULL, &trabalhador, &dc);
+    }
+
+    divide_trabalhos();
+
+    for (int i = 0; i <= NUM_TRABALHADORES; i++)
+    {
+        pthread_join(threads[i], NULL);
+        printf("Join %d \n", i);
+    }
+}
+
+void opa()
+{
+    draw(1, 2, 1.0, 0.0, 0.0);
 }

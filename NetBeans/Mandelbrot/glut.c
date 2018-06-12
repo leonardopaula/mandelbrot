@@ -57,3 +57,26 @@ void drawObj(ponto_t p) {
     //point = p;
     //display();
 }
+
+void keyboard(unsigned char key, int x, int y)
+{
+    /** Clear the screen. */
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    printf("Key -> %d\n", key);
+    
+    switch (key)
+    {
+        case 'v':
+            rodar();
+            break;
+        case 't':
+            opa();
+            break;
+        default:
+            break;
+    }
+
+    /** GLUT will receive a request for draw the screen again. */
+    //glutPostRedisplay();
+}

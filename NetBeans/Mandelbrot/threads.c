@@ -23,6 +23,8 @@ void * desenhista(void *arg)
 {
     struct dadosCompartilhados *dc = (struct dadosCompartilhados *)arg;
     
+    glColor3f(1.0, 0.0, 1.0);
+    /*
     while(dc->sacoDeResultados->tamanhoTrabalho > dc->sacoDeResultados->computado)
     {
         ponto* p;
@@ -32,5 +34,5 @@ void * desenhista(void *arg)
         draw(p->x, p->y, p->r, p->g, p->b);
         
         //printf("--> %d x %d", p->x, p->y);
-    }
+    }*/
 }

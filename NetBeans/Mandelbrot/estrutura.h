@@ -57,6 +57,11 @@ typedef struct lista_encadeada_t {
 
 typedef lista_encadeada_t* lista;
 
+typedef struct glut_t {
+    int id_janela;
+} glut_t;
+typedef glut_t* h_glut;
+
 struct dadosCompartilhados
 {
     int comprimento;
