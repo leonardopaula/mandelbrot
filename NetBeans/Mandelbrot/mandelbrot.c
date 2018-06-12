@@ -4,18 +4,20 @@
 
 #define MAX_ITERACOES 5000
 
-void mandelbrot_xy(trab trabalho, double escala, int cx, int cy, lista resultados) {
+void mandelbrot_xy(trab trabalho, double escala, double cx, double cy, lista resultados) {
 
+    escala = escala / 120;
     int linha, coluna = 0;
-    int comprimento = 800;//trabalho->final.x - trabalho->inicial.x;
-    int altura = 600;//trabalho->final.y - trabalho->inicial.y;
+    // Passar o tamanho total
+    int comprimento = 800; //trabalho->final.x - trabalho->inicial.x; 
+    int altura = 600; //trabalho->final.y - trabalho->inicial.y;
 
     for (linha = trabalho->inicial.y; linha < trabalho->final.y; linha++)
     {
         for (coluna = trabalho->inicial.x; coluna < trabalho->final.x; coluna++)
 	{
-            double real_c = (coluna - comprimento / 2) * (double) cx / (double)comprimento;
-            double im_c = (linha - altura / 2) * (double) cy / (double)comprimento;
+            double real_c = (coluna - comprimento / 2) * escala + (double) cx;
+            double im_c = (linha - altura / 2)  * escala + cy;
             double x = 0, y = 0;
             int i = 0;
             while (x * x + y * y < 4 && i < MAX_ITERACOES)

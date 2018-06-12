@@ -13,7 +13,7 @@ void * trabalhador(void *arg)
         trab t;
         t = remove_le(dc->sacoDeTarefas);
         
-        mandelbrot_xy(t, 1, -1.0, -1.0, dc->sacoDeResultados);
+        mandelbrot_xy(t, 10, -.6, 0.0, dc->sacoDeResultados);
 
     }
     //printf("Acabei! e fiz: %d\n", executado);
