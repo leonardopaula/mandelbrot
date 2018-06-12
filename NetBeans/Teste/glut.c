@@ -1,5 +1,5 @@
 #include "glut.h"
-
+/*
 void display(void) {
     
     const double w = glutGet(GLUT_WINDOW_WIDTH);
@@ -23,7 +23,7 @@ void mouse(int button, int state, int x, int y) {
         point.r = 0.0;
         point.g = 1.0;
         point.b = 0.0;
-    }*/
+    }
     glBegin(GLUT_SINGLE | GLUT_RGB);
         glVertex2i(x, 600 - y);
         printf("%dx%d\n", x, (600-y));
@@ -40,17 +40,17 @@ void draw(int x, int y, float r, float g, float b) {
     point.y = y;
     point.r = r;
     point.g = g;
-    point.b = b;*/
+    point.b = b;
     printf("------------------------------- DESENHA ------------------------------------\n");
     glColor3f(r, g, b);
     
     glBegin(GLUT_SINGLE | GLUT_RGB);
         glVertex2i(x, 600 - y);
-    glEnd;
+    glEnd();
     
     glFlush();
     
-    /*printf("Desnhei");*/
+    /*printf("Desnhei");
 }
 
 void drawObj(ponto_t p) {
@@ -60,7 +60,7 @@ void drawObj(ponto_t p) {
 
 void keyboard(unsigned char key, int x, int y)
 {
-    /** Clear the screen. */
+    /** Clear the screen. 
     glClear(GL_COLOR_BUFFER_BIT);
 
     printf("Key -> %d\n", key);
@@ -77,6 +77,6 @@ void keyboard(unsigned char key, int x, int y)
             break;
     }
 
-    /** GLUT will receive a request for draw the screen again. */
+    /** GLUT will receive a request for draw the screen again. 
     //glutPostRedisplay();
-}
+}*/

@@ -5,10 +5,10 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>estrutura.h</itemPath>
+      <itemPath>glut.h</itemPath>
       <itemPath>listaEncadeada.h</itemPath>
       <itemPath>mandelbrot.h</itemPath>
       <itemPath>threads.h</itemPath>
-      <itemPath>xlib.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -17,11 +17,11 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>glut.c</itemPath>
       <itemPath>listaEncadeada.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>mandelbrot.c</itemPath>
       <itemPath>threads.c</itemPath>
-      <itemPath>xlib.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -58,6 +58,10 @@
       </compileType>
       <item path="estrutura.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="glut.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="glut.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="listaEncadeada.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="listaEncadeada.h" ex="false" tool="3" flavor2="0">
@@ -71,10 +75,6 @@
       <item path="threads.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="threads.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="xlib.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="xlib.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -99,6 +99,10 @@
       </compileType>
       <item path="estrutura.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="glut.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="glut.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="listaEncadeada.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="listaEncadeada.h" ex="false" tool="3" flavor2="0">
@@ -112,10 +116,6 @@
       <item path="threads.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="threads.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="xlib.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="xlib.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

@@ -2,8 +2,18 @@
 #define ESTRUTURA_H
 
 #include <signal.h>
+#include <GL/glut.h>
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#ifdef _WIN32
+#include <windows.h>
+#endif
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
 #include <sys/types.h>
-#include "xlib.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -58,12 +68,29 @@ struct dadosCompartilhados
     int altura;
     lista sacoDeTarefas;
     lista sacoDeResultados;
-    xlib_dados xlib;
+    h_glut oGL;
 };
+
+typedef GLfloat gl_cor[3];
+typedef GLfloat gl_pt[3];
 
 typedef struct
 {
-    unsigned char r, g, b;
+    gl_cor ponto;
+    gl_pt  cor;
+} resultado_t;
+typedef resultado_t* resultado;
+
+typedef struct
+{
+    resultado *result;
+    int         total;
+} resultado_trabalho_t;
+typedef resultado_trabalho_t* resultado_trabalho;
+
+typedef struct
+{
+	unsigned char r, g, b;
 } rgb_t;
 
 #ifdef __cplusplus

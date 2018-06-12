@@ -3,23 +3,13 @@
 #include <pthread.h>
 #include <string.h>
 #include <math.h>
-#include <GL/glut.h>
-#include <GL/glut.h>
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
-#ifdef _WIN32
-#include <windows.h>
-#endif
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
+#include <X11/Xlib.h>
+
 #include "listaEncadeada.h"
 #include "estrutura.h"
 #include "mandelbrot.h"
 #include "threads.h"
-#include "glut.h"
+#include "xlib.h"
 
 
 #define COMPRIMENTO_JANELA 800
@@ -28,25 +18,16 @@
 #define DIVISOR_PIXEL 200
 
 struct dadosCompartilhados dc;
-h_glut oGL = NULL;
+xlib_dados_t xlib;
 
 void * trabalhador(void *str);
 void * desenhista(void *str);
 pthread_t threads[NUM_TRABALHADORES + 1]; // + Thread que imprime
 void divide_trabalhos();
-void display(void);
-void mouse(int button, int state, int x, int y);
-void draw(int x, int y, float r, float g, float b);
-//void* draw(int x, int y, float r, float g, float b);
-void drawObj(ponto_t p);
+void rodar();
 
-int tex_w, tex_h;
-rgb_t **tex = 0;
-int gwin;
-
-ponto_t point;
-
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) 
+{
     dc.comprimento = COMPRIMENTO_JANELA;
     dc.altura = ALTURA_JANELA;
     int tamanhoTrabalho = (int) dc.comprimento / DIVISOR_PIXEL * (int) dc.altura / DIVISOR_PIXEL;
@@ -54,31 +35,45 @@ int main(int argc, char *argv[]) {
     dc.sacoDeTarefas    = inicia_le(sizeof (trabalho_t), tamanhoTrabalho);
     dc.sacoDeResultados = inicia_le(sizeof (ponto_t), dc.comprimento*dc.altura);
 
-    oGL = malloc(sizeof(glut_t));
-    memset(oGL, 0, sizeof(glut_t));
+    // Levanta a interface
+    int screen;
+    XEvent event;
+    XGCValues val;
+   
+    xlib.dpy = XOpenDisplay(NULL);
     
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowSize(COMPRIMENTO_JANELA, ALTURA_JANELA);
-    glClearColor(1.0, 1.0, 1.0, 0.0);
-    oGL->id_janela = glutCreateWindow("Fractal de Mandelbrot");
-    glClearColor(1.0, 1.0, 1.0, 0.0);
-    glClear(GL_COLOR_BUFFER_BIT); // clear display window
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
+    screen = DefaultScreen(xlib.dpy);
     
+    xlib.win = XCreateSimpleWindow(xlib.dpy, RootWindow(xlib.dpy, screen),
+                            200, 200, COMPRIMENTO_JANELA, ALTURA_JANELA, 
+                            1, BlackPixel(xlib.dpy, screen), WhitePixel(xlib.dpy, screen));
+    XSelectInput(xlib.dpy, xlib.win, ExposureMask | KeyPressMask);
+    XMapWindow(xlib.dpy, xlib.win);
 
-    glutDisplayFunc(display);
-    glutMouseFunc(mouse);
-    glutKeyboardFunc(keyboard);
-
-    glutMainLoop();    
-
+    Colormap screen_colormap;
+    screen_colormap = DefaultColormap(xlib.dpy, DefaultScreen(xlib.dpy));
+    XAllocNamedColor(xlib.dpy, screen_colormap, "red", &xlib.red, &xlib.red);
+    XAllocNamedColor(xlib.dpy, screen_colormap, "white", &xlib.white, &xlib.white);
+    XAllocNamedColor(xlib.dpy, screen_colormap, "blue", &xlib.blue, &xlib.blue);
+    
+    xlib.gc = XCreateGC(xlib.dpy, xlib.win, 0, &val);
+    XSetForeground(xlib.dpy, xlib.gc, WhitePixel(xlib.dpy, screen));
+    XSetBackground(xlib.dpy, xlib.gc, BlackPixel(xlib.dpy, screen));  
+    XSetFillStyle(xlib.dpy, xlib.gc, FillSolid);
+   
+    dc.xlib = &xlib;
+    while(1)
+    {
+        rodar();
+        XNextEvent(xlib.dpy, &event);
+    }
+    // Lança as threads e divide os trabalhos
+    
     printf("Fim do programa");
 }
 
-void divide_trabalhos() {
+void divide_trabalhos() 
+{
     printf("Dividindo...");
     int tam_x = (int) dc.comprimento / DIVISOR_PIXEL;
     int tam_y = (int) dc.altura / DIVISOR_PIXEL;
@@ -103,23 +98,6 @@ void divide_trabalhos() {
     }
 }
 
-void alloc_tex() {
-    int i;
-    int ow = tex_w; //text width
-    int oh = tex_h; // text height
-
-    for (tex_w = 1; tex_w < COMPRIMENTO_JANELA; tex_w <<= 1);
-    for (tex_h = 1; tex_h < ALTURA_JANELA; tex_h <<= 1);
-
-    if (tex_h != oh || tex_w != ow) {
-        tex = realloc(tex, tex_h * tex_w * 3 + tex_h * sizeof (rgb_t *));
-    }
-
-    for (tex[0] = (rgb_t *) (tex + tex_h), i = 1; i < tex_h; i++)
-        tex[i] = tex[i - 1] + tex_w;
-}
-
-
 void rodar()
 {
     // Lança as threads (workers)
@@ -138,9 +116,4 @@ void rodar()
         pthread_join(threads[i], NULL);
         printf("Join %d \n", i);
     }
-}
-
-void opa()
-{
-    draw(1, 2, 1.0, 0.0, 0.0);
 }

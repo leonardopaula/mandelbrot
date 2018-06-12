@@ -35,11 +35,11 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/glut.o \
 	${OBJECTDIR}/listaEncadeada.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/mandelbrot.o \
-	${OBJECTDIR}/threads.o
+	${OBJECTDIR}/threads.o \
+	${OBJECTDIR}/xlib.o
 
 
 # C Compiler Flags
@@ -66,11 +66,6 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mandelbrot: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mandelbrot ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/glut.o: glut.c
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/glut.o glut.c
-
 ${OBJECTDIR}/listaEncadeada.o: listaEncadeada.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -90,6 +85,11 @@ ${OBJECTDIR}/threads.o: threads.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/threads.o threads.c
+
+${OBJECTDIR}/xlib.o: xlib.c
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/xlib.o xlib.c
 
 # Subprojects
 .build-subprojects:
