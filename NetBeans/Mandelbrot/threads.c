@@ -13,10 +13,11 @@ void * trabalhador(void *arg)
         trab t;
         t = remove_le(dc->sacoDeTarefas);
         
-        mandelbrot_xy(t, 10, DESLOCAR_X, DESLOCAR_Y, dc->sacoDeResultados);
-
+        mandelbrot_xy(t, dc->cfgMandelbrot->escala, dc->cfgMandelbrot->cx, dc->cfgMandelbrot->cy, dc->sacoDeResultados);
+        free(t);
     }
-    //printf("Acabei! e fiz: %d\n", executado);
+    printf("Acabei de calcular\n");
+    return EXIT_SUCCESS;
 }
 
 void * desenhista(void *arg)
@@ -27,12 +28,14 @@ void * desenhista(void *arg)
     {
         ponto* p;
         p = remove_le(dc->sacoDeResultados);
-        //printf("%d x %d", p->x, p->y);
-        //draw(p->x, p->y, p->r, p->g, p->b);
+
         if (p->r == 0)
             draw(dc->xlib->dpy, dc->xlib->gc, dc->xlib->win, p->x, p->y, dc->xlib->blue.pixel);
         else
             draw(dc->xlib->dpy, dc->xlib->gc, dc->xlib->win, p->x, p->y, dc->xlib->red.pixel);
-        //printf("--> %d x %d", p->x, p->y);
+        
+        free(p);
     }
+    printf("Acabei de desenhar\n");
+    return EXIT_SUCCESS;
 }

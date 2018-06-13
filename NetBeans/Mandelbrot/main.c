@@ -24,10 +24,6 @@ int main(int argc, char *argv[])
 {
     dc.comprimento = COMPRIMENTO_JANELA;
     dc.altura = ALTURA_JANELA;
-    int tamanhoTrabalho = (int) dc.comprimento / DIVISOR_PIXEL * (int) dc.altura / DIVISOR_PIXEL;
-
-    dc.sacoDeTarefas    = inicia_le(sizeof (trabalho_t), tamanhoTrabalho);
-    dc.sacoDeResultados = inicia_le(sizeof (ponto_t), dc.comprimento*dc.altura);
 
     // Levanta a interface
     int screen;
@@ -56,16 +52,31 @@ int main(int argc, char *argv[])
     XSetBackground(xlib.dpy, xlib.gc, BlackPixel(xlib.dpy, screen));  
     XSetFillStyle(xlib.dpy, xlib.gc, FillSolid);
    
+    dc.cfgMandelbrot = (config_mandelbrot_t *) malloc(sizeof(config_mandelbrot_t));
+    memset(dc.cfgMandelbrot, 0, sizeof(config_mandelbrot_t));
+    dc.cfgMandelbrot->cx = DESLOCAR_X;
+    dc.cfgMandelbrot->cy = DESLOCAR_Y;
+    dc.cfgMandelbrot->escala = 10;
+    
     dc.xlib = &xlib;
     int control = 0;
     while(1)
     {
-        if(control == 0){
+        if (control < 10)
+        {
+            printf("Execução: %d\n", control);
             rodar();
             control++;
-        }
-        
-        XNextEvent(xlib.dpy, &event);
+            
+            dc.cfgMandelbrot->escala -= 0.5;
+            dc.cfgMandelbrot->cx += 0.01;
+            dc.cfgMandelbrot->cy -= 0.01;
+        } 
+        printf("!!\n");
+        XFlush(xlib.dpy);
+        printf("<--\n");
+        //XNextEvent(xlib.dpy, &event);
+        printf("-->\n");
     }
     
     printf("Fim do programa");
@@ -73,7 +84,8 @@ int main(int argc, char *argv[])
 
 void divide_trabalhos() 
 {
-    printf("Dividindo...");
+    dc.sacoDeTarefas->computado = 0;
+
     int tam_x = (int) dc.comprimento / DIVISOR_PIXEL;
     int tam_y = (int) dc.altura / DIVISOR_PIXEL;
 
@@ -93,6 +105,7 @@ void divide_trabalhos()
             t->final.y = j * DIVISOR_PIXEL + DIVISOR_PIXEL; // ate y
             
             adiciona_le(dc.sacoDeTarefas, t);
+            free(t);
         }
     }
 }
@@ -100,23 +113,37 @@ void divide_trabalhos()
 // Lança as threads e divide os trabalhos
 void rodar()
 {
+    printf("Vamos!\n");
+    free(dc.sacoDeResultados);
+    free(dc.sacoDeTarefas);
+    int tamanhoTrabalho = (int) dc.comprimento / DIVISOR_PIXEL * (int) dc.altura / DIVISOR_PIXEL;
+    dc.sacoDeTarefas    = inicia_le(sizeof (trabalho_t), tamanhoTrabalho);
+    dc.sacoDeResultados = inicia_le(sizeof (ponto_t), dc.comprimento*dc.altura);
+
     // Lança as threads (workers)
     for (int i = 0; i <= NUM_TRABALHADORES; i++)
     {
         if (i == NUM_TRABALHADORES){
+            printf("Desenhista: %d \n", i);
             pthread_create(&threads[i], NULL, &desenhista, &dc);
-        } else
+        } else {
+            printf("Trabalhador: %d \n", i);
             pthread_create(&threads[i], NULL, &trabalhador, &dc);
+        }
+       
     }
 
     //Divisao do trabalho
     divide_trabalhos();
 
+    int thread_ret[NUM_TRABALHADORES + 1];
     //Join das threads
     for (int i = 0; i <= NUM_TRABALHADORES; i++)
     {
-        pthread_join(threads[i], NULL);
-        printf("Join %d \n", i);
+        thread_ret[i] = pthread_join(threads[i], NULL);
     }
     
+    printf("=========================== Finalizado ==============================\n");
+    
+    return;
 }

@@ -7,7 +7,7 @@
 
 #define COMPRIMENTO_JANELA 1024
 #define ALTURA_JANELA 768
-#define NUM_TRABALHADORES 32
+#define NUM_TRABALHADORES 4
 #define DIVISOR_PIXEL 64 // dependendo do divisor a imagem e desenhada completa ou nao.
 #define MANDELBROT_SIZE 4000
 #define DESLOCAR_X -0.8
@@ -61,6 +61,19 @@ typedef struct glut_t {
 } glut_t;
 typedef glut_t* h_glut;
 
+typedef struct
+{
+    unsigned char r, g, b;
+} rgb_t;
+
+typedef struct
+{
+    double escala;
+    double cx;
+    double cy;
+} config_mandelbrot_t;
+typedef config_mandelbrot_t* config_mandelbrot;
+
 struct dadosCompartilhados
 {
     int comprimento;
@@ -68,12 +81,8 @@ struct dadosCompartilhados
     lista sacoDeTarefas;
     lista sacoDeResultados;
     xlib_dados xlib;
+    config_mandelbrot cfgMandelbrot;
 };
-
-typedef struct
-{
-    unsigned char r, g, b;
-} rgb_t;
 
 #ifdef __cplusplus
 }

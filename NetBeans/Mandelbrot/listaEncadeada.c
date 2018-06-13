@@ -23,6 +23,13 @@ lista inicia_le(int tamanhoDados, int tamanhoTrabalho)
     return l;
 }
 
+void reinicia_le(const lista l)
+{
+    l->computado = 0;
+    l->inicial = NULL;
+    l->final   = NULL;
+}
+
 no aloca_no(const lista l, const void *dados)
 {
     no n = (no) malloc(sizeof(no_t));

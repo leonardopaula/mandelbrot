@@ -14,6 +14,7 @@ extern "C" {
 #endif
 
 lista inicia_le(int tamanhoDados, int tamanhoTrabalho);
+void reinicia_le(const lista l);
 no aloca_no(const lista l, const void *dados);
 void adiciona_le(const lista l, const void *dados);
 void *remove_le(const lista l);

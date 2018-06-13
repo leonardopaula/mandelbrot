@@ -52,6 +52,7 @@ void mandelbrot_xy(trab trabalho, double escala, double cx, double cy, lista res
                 // printf("(%d,%d) Preto\n",coluna, linha);
             }
             adiciona_le(resultados, p);
+            free(p);
         }
     }
 }
