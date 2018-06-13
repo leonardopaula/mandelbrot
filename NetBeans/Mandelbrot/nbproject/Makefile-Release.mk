@@ -38,7 +38,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/listaEncadeada.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/mandelbrot.o \
-	${OBJECTDIR}/threads.o
+	${OBJECTDIR}/threads.o \
+	${OBJECTDIR}/xlib.o
 
 
 # C Compiler Flags
@@ -84,6 +85,11 @@ ${OBJECTDIR}/threads.o: threads.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/threads.o threads.c
+
+${OBJECTDIR}/xlib.o: xlib.c
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/xlib.o xlib.c
 
 # Subprojects
 .build-subprojects:

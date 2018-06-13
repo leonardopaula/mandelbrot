@@ -1,22 +1,24 @@
 #include "listaEncadeada.h"
 #include "estrutura.h"
+#include "glut.h"
 #include <stdio.h>
 
-void mandelbrot_xy(trab trabalho, double escala, double cx, double cy, lista resultados) {
+#define MAX_ITERACOES 5000
 
-    escala = escala / MANDELBROT_SIZE;
-    int linha = 0;
-    int coluna = 0;
+void mandelbrot_xy(trab trabalho, double escala, int cx, int cy, lista resultados) {
 
-    int comprimento = COMPRIMENTO_JANELA; //trabalho->final.x - trabalho->inicial.x; 
-    int altura = ALTURA_JANELA; //trabalho->final.y - trabalho->inicial.y;
+    int linha, coluna = 0;
+    int comprimento = trabalho->final.x - trabalho->inicial.x;
+    int altura = trabalho->final.y - trabalho->inicial.y;
+    unsigned char branco[3] = {0, 0, 0};
+    unsigned char preto[3] = {255, 255, 255};
 
     for (linha = trabalho->inicial.y; linha < trabalho->final.y; linha++)
     {
         for (coluna = trabalho->inicial.x; coluna < trabalho->final.x; coluna++)
 	{
-            double real_c = (coluna - comprimento / 2) * escala + (double) cx;
-            double im_c = (linha - altura / 2)  * escala + cy;
+            double real_c = (coluna - comprimento / 2) * cx / comprimento;
+            double im_c = (linha - altura / 2) * cy / comprimento;
             double x = 0, y = 0;
             int i = 0;
             while (x * x + y * y < 4 && i < MAX_ITERACOES)

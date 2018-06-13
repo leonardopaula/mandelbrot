@@ -16,7 +16,7 @@
 extern "C" {
 #endif
 
-void mandelbrot_xy(trab trabalho, double escala, double cx, double cy, lista resultados);
+void mandelbrot_xy(trab trabalho, double escala, int cx, int cy, lista resultados);
 
 #ifdef __cplusplus
 }
