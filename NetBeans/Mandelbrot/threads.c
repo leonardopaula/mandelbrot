@@ -30,9 +30,9 @@ void * desenhista(void *arg)
         p = remove_le(dc->sacoDeResultados);
 
         if (p->r == 0)
-            draw(dc->xlib->dpy, dc->xlib->gc, dc->xlib->win, p->x, p->y, dc->xlib->blue.pixel);
+            draw(dc->xlib->dpy, dc->xlib->gc, dc->xlib->win, p->x, p->y, dc->xlib->black.pixel);
         else
-            draw(dc->xlib->dpy, dc->xlib->gc, dc->xlib->win, p->x, p->y, dc->xlib->red.pixel);
+            draw(dc->xlib->dpy, dc->xlib->gc, dc->xlib->win, p->x, p->y, dc->xlib->gray.pixel);
         
         free(p);
     }

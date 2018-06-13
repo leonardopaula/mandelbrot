@@ -46,6 +46,8 @@ int main(int argc, char *argv[])
     XAllocNamedColor(xlib.dpy, screen_colormap, "red", &xlib.red, &xlib.red);
     XAllocNamedColor(xlib.dpy, screen_colormap, "white", &xlib.white, &xlib.white);
     XAllocNamedColor(xlib.dpy, screen_colormap, "blue", &xlib.blue, &xlib.blue);
+    XAllocNamedColor(xlib.dpy, screen_colormap, "black", &xlib.black, &xlib.black);
+    XAllocNamedColor(xlib.dpy, screen_colormap, "gray", &xlib.gray, &xlib.gray);
     
     xlib.gc = XCreateGC(xlib.dpy, xlib.win, 0, &val);
     XSetForeground(xlib.dpy, xlib.gc, WhitePixel(xlib.dpy, screen));
@@ -68,15 +70,13 @@ int main(int argc, char *argv[])
             rodar();
             control++;
             
-            dc.cfgMandelbrot->escala -= 0.5;
+            dc.cfgMandelbrot->escala -= 2;
             dc.cfgMandelbrot->cx += 0.01;
             dc.cfgMandelbrot->cy -= 0.01;
+            sleep(1);
         } 
-        printf("!!\n");
         XFlush(xlib.dpy);
-        printf("<--\n");
         //XNextEvent(xlib.dpy, &event);
-        printf("-->\n");
     }
     
     printf("Fim do programa");

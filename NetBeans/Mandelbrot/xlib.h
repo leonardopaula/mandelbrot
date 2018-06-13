@@ -12,7 +12,7 @@ typedef struct xlib_dados_t
     Display* dpy;
     GC gc;
     Window win;
-    XColor red, blue, white, black;
+    XColor red, blue, white, black, gray;
 } xlib_dados_t;
 typedef xlib_dados_t* xlib_dados;
 
