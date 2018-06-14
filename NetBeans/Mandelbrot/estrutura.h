@@ -7,11 +7,11 @@
 
 #define COMPRIMENTO_JANELA 1024
 #define ALTURA_JANELA 768
-#define NUM_TRABALHADORES 4
-#define DIVISOR_PIXEL 64 // dependendo do divisor a imagem e desenhada completa ou nao.
+#define NUM_TRABALHADORES 8
+#define DIVISOR_PIXEL 32 // dependendo do divisor a imagem e desenhada completa ou nao.
 #define MANDELBROT_SIZE 4000
-#define DESLOCAR_X -0.8
-#define DESLOCAR_Y -0.05
+#define DESLOCAR_X -0.6
+#define DESLOCAR_Y -0.0
 #define MAX_ITERACOES 5000
 
 #ifdef __cplusplus
@@ -78,6 +78,7 @@ struct dadosCompartilhados
 {
     int comprimento;
     int altura;
+    int execucao;
     lista sacoDeTarefas;
     lista sacoDeResultados;
     xlib_dados xlib;

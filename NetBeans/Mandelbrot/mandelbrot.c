@@ -4,7 +4,7 @@
 
 void mandelbrot_xy(trab trabalho, double escala, double cx, double cy, lista resultados) {
 
-    escala = escala / MANDELBROT_SIZE;
+    //escala = escala / MANDELBROT_SIZE;
     int linha = 0;
     int coluna = 0;
 

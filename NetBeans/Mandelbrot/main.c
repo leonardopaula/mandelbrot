@@ -58,23 +58,34 @@ int main(int argc, char *argv[])
     memset(dc.cfgMandelbrot, 0, sizeof(config_mandelbrot_t));
     dc.cfgMandelbrot->cx = DESLOCAR_X;
     dc.cfgMandelbrot->cy = DESLOCAR_Y;
-    dc.cfgMandelbrot->escala = 10;
+    dc.cfgMandelbrot->escala = 1. / 256;
     
     dc.xlib = &xlib;
     int control = 0;
     while(1)
     {
-        if (control < 10)
+        if (control > 0)
+        {
+            dc.cfgMandelbrot->cx += (580 - dc.comprimento/2) * dc.cfgMandelbrot->escala;
+            dc.cfgMandelbrot->cy -= (250 - dc.altura/2) * dc.cfgMandelbrot->escala;
+        }
+        dc.execucao = (control % 2);
+        if (control < 5)
         {
             printf("Execução: %d\n", control);
             rodar();
             control++;
             
-            dc.cfgMandelbrot->escala -= 2;
-            dc.cfgMandelbrot->cx += 0.01;
-            dc.cfgMandelbrot->cy -= 0.01;
+            dc.cfgMandelbrot->escala /= 2;
             sleep(1);
-        } 
+        } else {
+            printf("Execução: %d\n", control);
+            rodar();
+            control++;
+            
+            dc.cfgMandelbrot->escala *= 2;
+            sleep(1);
+        }
         XFlush(xlib.dpy);
         //XNextEvent(xlib.dpy, &event);
     }

@@ -29,11 +29,14 @@ void * desenhista(void *arg)
         ponto* p;
         p = remove_le(dc->sacoDeResultados);
 
+        long cor = 0;
         if (p->r == 0)
-            draw(dc->xlib->dpy, dc->xlib->gc, dc->xlib->win, p->x, p->y, dc->xlib->black.pixel);
+            cor = (dc->execucao == 1) ? dc->xlib->red.pixel : dc->xlib->black.pixel;
         else
-            draw(dc->xlib->dpy, dc->xlib->gc, dc->xlib->win, p->x, p->y, dc->xlib->gray.pixel);
-        
+            cor = (dc->execucao == 1) ? dc->xlib->white.pixel : dc->xlib->gray.pixel;
+     
+        draw(dc->xlib->dpy, dc->xlib->gc, dc->xlib->win, p->x, p->y, cor);
+       
         free(p);
     }
     printf("Acabei de desenhar\n");
